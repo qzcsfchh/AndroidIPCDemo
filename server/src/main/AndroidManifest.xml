@@ -26,12 +26,17 @@
             </intent-filter>
         </service>
         <receiver android:name=".ipc.BroadcastReceiverServer"
-            android:permission="TODO">
+            android:exported="true"
+            android:enabled="true">
             <intent-filter>
                 <action android:name="me.android.ipc.server.broadcast" />
-                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </receiver>
+
+        <provider
+            android:exported="true"
+            android:authorities="me.android.ipc.server.contentprovider"
+            android:name=".ipc.ContentProviderServer" />
     </application>
 
 </manifest>

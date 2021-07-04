@@ -6,21 +6,31 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.os.Build;
 import android.os.Bundle;
 
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import me.android.ipc.client.ui.AidlFragment;
+import me.android.ipc.client.ui.BroadcastReceiverFragment;
+import me.android.ipc.client.ui.ContentProviderFragment;
 
 import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
 
 public class MainActivity extends AppCompatActivity {
-    private final List<Fragment> mFragments = Arrays.<Fragment>asList(
-            new AidlFragment()
-    );
+    private final List<Fragment> mFragments = new ArrayList<Fragment>(){{
+        add(new AidlFragment());
+        add(new BroadcastReceiverFragment());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            add(new ContentProviderFragment());
+        }
+    }};
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

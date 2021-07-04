@@ -1,11 +1,11 @@
-// IPClInterface.aidl
+// IPCInterface.aidl
 package me.android.ipc;
 
 // Declare any non-default types here with import statements
 import android.graphics.Bitmap;
 import me.android.ipc.Data;
 
-interface IPClInterface {
+interface IPCInterface {
     /**
      * Demonstrates some basic types that you can use as parameters
      * and return values in AIDL.

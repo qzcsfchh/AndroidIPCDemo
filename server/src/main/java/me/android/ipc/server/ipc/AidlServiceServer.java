@@ -14,7 +14,8 @@ import android.util.Log;
 import org.greenrobot.eventbus.EventBus;
 
 import me.android.ipc.data.Data;
-import me.android.ipc.IPClInterface;
+import me.android.ipc.IPCInterface;
+import me.android.ipc.server.Utils;
 
 /**
  * The Aidl service， this service will be started by client.
@@ -22,15 +23,14 @@ import me.android.ipc.IPClInterface;
  * get connected with Aidl service.
  */
 public final class AidlServiceServer extends Service {
-    final String TAG = getClass().getSimpleName();
+    public static final String TAG = "AidlServiceServer";
     private static int counter;
 
-    private final IPClInterface.Stub mStub = new IPClInterface.Stub() {
+    private final IPCInterface.Stub mStub = new IPCInterface.Stub() {
         @Override
         public Bitmap getImage(String uri) throws RemoteException {
             EventBus.getDefault().post(TAG + " getImage() called with: uri = [" + uri + "]" + threadName());
-            Drawable icon = getApplicationInfo().loadIcon(getPackageManager());
-            return drawable2bitmap(icon);
+            return Utils.loadBitmap(getApplicationContext());
         }
 
         @Override
@@ -51,19 +51,6 @@ public final class AidlServiceServer extends Service {
     public IBinder onBind(Intent intent) {
         EventBus.getDefault().post(TAG + " onBind: " + threadName());
         return mStub;
-    }
-
-
-    private Bitmap drawable2bitmap(Drawable icon) {
-        if (icon == null) return null;
-        int width = icon.getIntrinsicWidth();
-        int height = icon.getIntrinsicHeight();
-        if (width == 0 || height == 0) return null;
-        icon.setBounds(0, 0, width, height);
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        icon.draw(canvas);
-        return bitmap;
     }
 
 }

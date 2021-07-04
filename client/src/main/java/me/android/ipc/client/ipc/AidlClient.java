@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.RemoteException;
 
@@ -13,13 +14,11 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleEventObserver;
 import androidx.lifecycle.LifecycleOwner;
 
-import java.util.concurrent.TimeUnit;
-
-import me.android.ipc.IPClInterface;
+import me.android.ipc.IPCInterface;
 import me.android.ipc.data.Data;
 
-public class AidlClient implements ServiceConnection, IPClInterface, LifecycleEventObserver {
-    IPClInterface mInterface;
+public class AidlClient implements ServiceConnection, IPCInterface, LifecycleEventObserver {
+    IPCInterface mInterface;
     private final Context mContext;
 
     public AidlClient(Context context) {
@@ -33,7 +32,11 @@ public class AidlClient implements ServiceConnection, IPClInterface, LifecycleEv
     public void start() {
         // Intent must be explicit
         Intent intent = new Intent("me.android.ipc.server.aidl");
-        intent.setPackage("me.android.ipc.server");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {//安卓11
+            intent.setClassName("me.android.ipc.server", "me.android.ipc.server.ipc.AidlServiceServer");
+        } else {
+            intent.setPackage("me.android.ipc.server");
+        }
         mContext.bindService(intent, this, Context.BIND_AUTO_CREATE);
     }
 
@@ -43,7 +46,7 @@ public class AidlClient implements ServiceConnection, IPClInterface, LifecycleEv
 
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
-        mInterface = IPClInterface.Stub.asInterface(service);
+        mInterface = IPCInterface.Stub.asInterface(service);
     }
 
     @Override
@@ -67,7 +70,7 @@ public class AidlClient implements ServiceConnection, IPClInterface, LifecycleEv
     }
 
     @NonNull
-    private IPClInterface requireInterface() throws RemoteException {
+    private IPCInterface requireInterface() throws RemoteException {
         if (mInterface == null) {
             throw new RemoteException("Service not connected yet, have you call start() ?");
         }

@@ -2,42 +2,32 @@ package me.android.ipc.client.ui;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.Bundle;
+import android.os.Build;
 import android.os.RemoteException;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.annotation.RequiresApi;
 
-import java.util.UUID;
-
-import me.android.ipc.client.ipc.AidlClient;
+import me.android.ipc.client.ipc.ContentProviderClient;
 import me.android.ipc.data.Data;
 
-public class AidlFragment extends BaseFragment {
-    private AidlClient mAidlClient;
 
+@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+public class ContentProviderFragment extends BaseFragment{
+    private ContentProviderClient mClient;
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        mAidlClient = new AidlClient(context);
-        mAidlClient.bind(this);
+        mClient = new ContentProviderClient(context);
     }
 
     @Override
     protected void getData() {
         try {
-            Data data = mAidlClient.getData(UUID.randomUUID().toString());
+            Data data = mClient.getData();
             mTextView.append(data + "\n");
         } catch (RemoteException e) {
             mTextView.append(e.getMessage()+"\n");
@@ -45,9 +35,9 @@ public class AidlFragment extends BaseFragment {
     }
 
     @Override
-    protected void getImage(){
+    protected void getImage() {
         try {
-            Bitmap image = mAidlClient.getImage(UUID.randomUUID().toString());
+            Bitmap image = mClient.getImage();
             if (image == null) {
                 mTextView.append("null"+"\n");
             }else {

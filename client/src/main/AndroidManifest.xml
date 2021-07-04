@@ -16,6 +16,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver android:name=".ipc.BroadcastReceiverClient"
+            android:exported="true"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="me.android.ipc.server.broadcast.feedback" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
