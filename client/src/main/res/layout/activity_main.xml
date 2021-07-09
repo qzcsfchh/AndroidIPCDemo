@@ -9,6 +9,8 @@
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
+        app:tabTextAppearance="@style/TabLayoutTextStyle"
+        app:tabPadding="0dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

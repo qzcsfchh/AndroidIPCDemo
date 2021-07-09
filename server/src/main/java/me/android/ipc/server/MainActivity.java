@@ -1,23 +1,23 @@
 package me.android.ipc.server;
 
+import android.os.Build;
+import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import android.os.Build;
-import android.os.Bundle;
-
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import me.android.ipc.server.ui.AidlFragment;
 import me.android.ipc.server.ui.BroadcastReceiverFragment;
 import me.android.ipc.server.ui.ContentProviderFragment;
+import me.android.ipc.server.ui.SocketFragment;
 
 import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
 
@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             add(new ContentProviderFragment());
         }
+        add(new SocketFragment());
     }};
 
     @Override

@@ -1,4 +1,4 @@
-package me.android.ipc.server;
+package me.android.ipc.client;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.Objects;
 
 public class Utils {
 
@@ -83,6 +84,39 @@ public class Utils {
                 : BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }
 
+
+
+    public interface BiConsumer<T, U> {
+
+        /**
+         * Performs this operation on the given arguments.
+         *
+         * @param t the first input argument
+         * @param u the second input argument
+         */
+        void accept(T t, U u);
+
+        /**
+         * Returns a composed {@code BiConsumer} that performs, in sequence, this
+         * operation followed by the {@code after} operation. If performing either
+         * operation throws an exception, it is relayed to the caller of the
+         * composed operation.  If performing this operation throws an exception,
+         * the {@code after} operation will not be performed.
+         *
+         * @param after the operation to perform after this operation
+         * @return a composed {@code BiConsumer} that performs in sequence this
+         * operation followed by the {@code after} operation
+         * @throws NullPointerException if {@code after} is null
+         */
+        default BiConsumer<T, U> andThen(BiConsumer<? super T, ? super U> after) {
+            Objects.requireNonNull(after);
+
+            return (l, r) -> {
+                accept(l, r);
+                after.accept(l, r);
+            };
+        }
+    }
 
 
     public static final class XData implements Parcelable {
